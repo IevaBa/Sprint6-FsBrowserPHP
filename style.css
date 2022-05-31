@@ -1,12 +1,48 @@
 * {
   font-family: arial;
+}
+h1,
+h3 {
   margin-left: 0.5rem;
 }
+.new-dir_and_upload {
+  display: flex;
+  max-width: 80%;
+  justify-content: space-between;
+  margin-left: 0.5rem;
+}
+.upload,
+.new-dir {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
+.upload {
+  border: 0.2rem dashed darkgray;
+  min-width: 50%;
+}
+.new-dir-input {
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+}
+.upload button,
+.new-dir button,
+.new-dir {
+  justify-content: center;
+  width: 20vw;
+}
+.new-dir-input,
+.upload-input {
+  margin-top: 1rem;
+  padding: 0.5rem 0;
+}
 table {
   border-collapse: collapse;
   min-width: 80%;
   justify-content: center;
+  margin-left: 0.5rem;
 }
 
 td,
@@ -31,4 +67,15 @@ button {
 }
 button > a {
   text-decoration: none;
+}
+.msg {
+  display: block;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.msg.error {
+  color: rgb(237, 84, 84);
+}
+.msg.success {
+  color: rgba(10, 133, 10, 0.671);
 }
