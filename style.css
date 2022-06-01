@@ -39,6 +39,7 @@ h3 {
   padding: 0.5rem 0;
 }
 table {
+  margin-top: 1rem;
   border-collapse: collapse;
   min-width: 80%;
   justify-content: center;
@@ -78,4 +79,8 @@ button > a {
 }
 .msg.success {
   color: rgba(10, 133, 10, 0.671);
+}
+.download > button,
+.delete > button {
+  margin: 0;
 }

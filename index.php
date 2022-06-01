@@ -15,6 +15,14 @@
 <body>
     <h1>Files Browser</h1>
     <?php 
+    $path='./' . $_GET["path"]; 
+    $dir= scandir($path);
+    $full_path= $_SERVER['REQUEST_URI'].$value;
+    $go_back = "?path=". ltrim(dirname($_GET["path"]),"./")."/";
+    //echo $go_back;
+    //echo '<br>';
+    //echo $full_path;
+    //echo '<h3>Directory contents: '.str_replace('?path=/','',$_SERVER['REQUEST_URI']).'</h3>';
     // upload files logic
    if(isset($_FILES['file-name'])){
     $errors = "";
@@ -40,7 +48,35 @@
     } else {
         print_r($errors);
         }
+        header("refresh: 1"); 
     }
+    // download file logic
+    if(isset($_POST['download'])){
+     print('Path to download: ' . $path . $_POST['download']);
+    $file='./' . $_POST['download'];
+    //$fileToDownloadEscaped = str_replace("&nbsp;", " ", htmlentities($file, 0, 'utf-8'));
+    $fileToDownloadEscaped = str_replace(" ", "%20", htmlentities($file, 0, 'utf-8'));
+    ob_clean();
+    ob_start();
+    header('Content-Description: File Transfer');
+    header('Content-Type: application/pdf'); 
+    header("Content-Disposition: attachment; filename= \"" . basename($fileToDownloadEscaped)."\"");
+    header('Content-Transfer-Encoding: binary');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+    header('Pragma: public');
+    header('Content-Length: ' . filesize($fileToDownloadEscaped)); 
+    ob_end_flush();
+    readfile($fileToDownloadEscaped);
+    exit;
+        }
+    // delete logic
+    if (isset($_POST['delete'])){
+        if(is_file($_POST['delete'])) {
+            unlink($_POST['delete']);
+        } 
+        header("refresh: 1");  
+    }  
     // wrapper
     echo '<div class="new-dir_and_upload">';
     // create new dir
@@ -55,18 +91,9 @@
         </form>';
     echo '</div>';
     // table
-    echo "<table><tr><th>Type</th><th>Name</th></tr> ";
-    $path='./' . $_GET["path"]; 
-    $dir= scandir($path);
-    $full_path= $_SERVER['REQUEST_URI'].$value;
-    $go_back = "?path=". ltrim(dirname($_GET["path"]),"./")."/";
-    echo $go_back;
-    echo '<br>';
-    echo $full_path;
-    echo '<h3>Directory contents: '.str_replace('?path=/','',$_SERVER['REQUEST_URI']).'</h3>';
-        
+    echo "<table><tr><th>Type</th><th>Name</th><th>Download</th><th>Delete</th></tr> ";
     foreach ($dir as $value){
-    if ($value != '..' && $value !='.' && $value != '.git' && $value != '.DS_Store'){
+    if ($value != '..' && $value !='.' && $value != '.git' && $value != '.DS_Store' && $value != 'index.php' && $value != 'style.css' ){
         // checks type
         echo '<tr>'.'<td>';
         if (is_dir($path.$value))
@@ -76,9 +103,25 @@
         echo '<td>'.(is_dir($path.$value)? '<a href="'.(isset($_GET['path'])
         ? $_SERVER['REQUEST_URI'].$value.'/'
         : $_SERVER['REQUEST_URI'].'?path='.$value.'/').'">'.$value.'</a>'
-        : $value); '</td>';  
+        : $value); '</td>';
+        // download file
+        echo '<td>';
+            if(is_file($path.$value)){
+                echo('<form class="download" action=" ?path=' . $path.$value . ' " method="POST">');
+                echo('<button type="submit" name="download" value='.$path.$value.'>Download</button>');
+                echo('</form>');
+            }
+        echo '</td>'; 
+        // delete file 
+        echo '<td>'.
+        (is_dir($path.$value) 
+        ?''
+        : '<form class="delete" action="" method="post">
+           <button type ="submit" name="delete" value ='.$path.$value.'>Delete</button>
+           </form>');
+        echo '</td>';   
     }
-        }
+}
     // create new dir logic
     foreach ($dir as $value) {
     if (isset($_POST['new_dir']) && (!file_exists($_POST['new_dir']))){     
