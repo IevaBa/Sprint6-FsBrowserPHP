@@ -55,12 +55,17 @@
     echo '<header><h1>Files System Browser</h1></header>';
     $path='./' . $_GET["path"]; 
     $dir= scandir($path);
-    $full_path= $_SERVER['REQUEST_URI'].$value;
     $go_back = "?path=". ltrim(dirname($_GET["path"]),"./")."/";
-    //echo $go_back;
-    //echo '<br>';
-    //echo $full_path;
-    //echo '<h3>Directory contents: '.str_replace('?path=/','',$_SERVER['REQUEST_URI']).'</h3>';
+    
+    
+    // create new dir logic
+    if (isset($_POST['new_dir']) && (!file_exists($_POST['new_dir']))){     
+    mkdir($path. '/'.$_POST['new_dir']);
+    header("refresh: 1");
+    } 
+     else if (isset($_POST['new_dir']) && file_exists($path. '/'.$_POST['new_dir'])) {
+    echo '<div style="text-align: left; margin-left: 10%" class="msg error"> Directory named "' . $_POST['new_dir'] . '" already exists !!!</div>';}
+
     // upload files logic
    if(isset($_FILES['file-name'])){
     $errors = "";
@@ -70,16 +75,17 @@
     $file_type = $_FILES['file-name']['type'];
      // check extension 
     $file_ext = strtolower(end(explode('.',$_FILES['file-name']['name']))); 
-    $extensions = array("jpeg","png","pdf");
+    $extensions = ["jpg","png","pdf"];
     if(in_array($file_ext, $extensions) === false){
-        $errors = '<div class= "msg error" >File format not allowed !!! Please choose JPEG, PNG or PDF file. </div>';
+        $errors = '<div class= "msg error" >File format not allowed !!! Please choose JPG, PNG or PDF file. </div>';
         }
     if($file_size > 3000000) {
         $errors = '<div class= "msg error">File size is too big !!! (MAX 3 MB)</div>';
         }
-    if (file_exists($file_name)){
-       $errors = '<div class= "msg error">File with the same name already exists !!! </div>'; 
-    }
+    // unique name for the file
+    time();
+    $ext = pathinfo(path:$file_name, flags:PATHINFO_EXTENSION);
+    $file_name= time() .'.'.$ext;
     if(empty($errors) == true) {
         move_uploaded_file($file_tmp, './' . $_GET['path'] . $file_name); 
         echo '<div class= "msg success"> File successfully uploaded !!! </div>'; 
@@ -91,14 +97,12 @@
     // download file logic
     if(isset($_POST['download'])){
      print('Path to download: ' . $path . $_POST['download']);
-    $file='./' . $_POST['download'];
-    //$fileToDownloadEscaped = str_replace("&nbsp;", " ", htmlentities($file, 0, 'utf-8'));
-    $fileToDownloadEscaped = str_replace(" ", "%20", htmlentities($file, 0, 'utf-8'));
+    $fileToDownloadEscaped = str_replace(" ", "_", htmlentities($path, 0, 'utf-8'));
     ob_clean();
     ob_start();
     header('Content-Description: File Transfer');
     header('Content-Type: application/pdf'); 
-    header("Content-Disposition: attachment; filename= \"" . basename($fileToDownloadEscaped)."\"");
+    header('Content-Disposition: attachment; filename= '.basename($fileToDownloadEscaped));
     header('Content-Transfer-Encoding: binary');
     header('Expires: 0');
     header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
@@ -160,13 +164,6 @@
         echo '</td>';   
     }
 }
-    // create new dir logic
-    foreach ($dir as $value) {
-    if (isset($_POST['new_dir']) && (!file_exists($_POST['new_dir']))){     
-    mkdir($path. '/'.$_POST['new_dir']);
-    header("refresh: 1");
-    } 
-}  
     echo "</table></div>"; 
     // go back and logout
     echo '<div style= "display: flex; justify-content: space-between; margin-top: 3rem" >';
