@@ -1,23 +1,39 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;1,300&display=swap");
 * {
-  font-family: arial;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Rubik", sans-serif;
+  letter-spacing: 0.1rem;
+  font-size: 1rem;
 }
-h1,
-h3 {
-  margin-left: 0.5rem;
+body {
+  background-color: #dfe0e4;
+  height: 100%;
+  min-height: 100vh;
+}
+header {
+  text-align: left;
+  padding: 2rem;
+  background-color: #ffe35f;
+}
+h1 {
+  font-size: 1.5rem;
+  margin-left: 9%;
 }
 .new-dir_and_upload {
   display: flex;
-  max-width: 80%;
-  justify-content: space-between;
-  margin-left: 0.5rem;
+  min-width: 80vw;
+  justify-content: space-evenly;
+  margin: 1rem 0;
 }
 .upload,
 .new-dir {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 1.5rem;
 }
-
 .upload {
   border: 0.2rem dashed darkgray;
   min-width: 50%;
@@ -33,49 +49,49 @@ h3 {
   justify-content: center;
   width: 20vw;
 }
-.new-dir-input,
-.upload-input {
-  margin-top: 1rem;
-  padding: 0.5rem 0;
-}
 table {
-  margin-top: 1rem;
   border-collapse: collapse;
-  min-width: 80%;
+  min-width: 80vw;
   justify-content: center;
   margin-left: 0.5rem;
 }
-
 td,
 th {
   border: 0.1px solid darkgray;
   text-align: left;
+}
+td {
+  padding: 0 0.8rem;
+}
+th {
+  background: rgba(0, 0, 0, 0.7);
+  color: rgb(235, 232, 232);
   padding: 0.8rem;
 }
-
-th {
-  background-color: lightseagreen;
+.file-or-dir {
+  padding: 0.8rem 0;
 }
-
-tr:nth-child(even) {
-  background-color: #dddddd;
+table button {
+  padding: 0.4rem;
 }
-
 button {
-  display: flex;
-  margin: 1rem 0.5rem;
-  padding: 0.5rem 1rem;
-}
-button > a {
-  text-decoration: none;
+  border: none;
+  outline: none;
+  color: rgb(235, 232, 232);
+  background: rgba(0, 0, 0, 0.7);
+  padding: 0.7rem 1rem;
+  border-radius: 0.2rem;
+  cursor: pointer;
 }
 .msg {
   display: block;
   text-align: center;
-  margin-bottom: 1rem;
+  margin: 1rem;
+  font-weight: bold;
 }
+.msg.login,
 .msg.error {
-  color: rgb(237, 84, 84);
+  color: #ff642f;
 }
 .msg.success {
   color: rgba(10, 133, 10, 0.671);
@@ -83,4 +99,67 @@ button > a {
 .download > button,
 .delete > button {
   margin: 0;
+}
+.login-wrapper {
+  height: 100vh;
+  width: 100vw;
+}
+.login-form {
+  position: relative;
+  width: 100%;
+  max-width: 28rem;
+  padding: 6rem 3.5rem 3.5rem;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 0.8rem;
+  color: white;
+  box-shadow: 0 1.3rem 2.2rem rgba(0, 0, 0, 0.5);
+}
+.login-form h2 {
+  text-align: center;
+  letter-spacing: 0.1rem;
+  margin-bottom: 2rem;
+  color: #ffe35f;
+}
+.login-form .input-group {
+  position: relative;
+}
+.login-form .input-group input {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  margin-bottom: 30px;
+  border: none;
+  border-bottom: 1px solid #fff;
+  outline: none;
+  background-color: transparent;
+  color: inherit;
+}
+.login-form .input-group label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px 0;
+  font-size: 1rem;
+  pointer-events: none;
+  transition: 0.3s ease-out;
+}
+.login-form .input-group input:focus + label,
+.login-form .input-group input:valid + label {
+  transform: translateY(-25px);
+  color: #ffe35f;
+  font-size: 0.8rem;
+}
+.submit-btn {
+  display: block;
+  margin-left: auto;
+  border: none;
+  outline: none;
+  background: #ffe35f;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
 }
