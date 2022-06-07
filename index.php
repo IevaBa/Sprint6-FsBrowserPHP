@@ -1,3 +1,8 @@
+<?php 
+ini_set ('display_errors', 1);
+ini_set ('display_startup_errors', 1);
+error_reporting (E_ALL);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,10 +58,14 @@
     if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true) {
     $log_out = './?action=logout';
     echo '<header><h1>Files System Browser</h1></header>';
-    $path='./' . $_GET["path"]; 
-    $dir= scandir($path);
-    $go_back = "?path=". ltrim(dirname($_GET["path"]),"./")."/";
     
+    if (isset($_GET["path"])) {
+        $path='./' . $_GET["path"];
+    } else  $path='./';
+     
+    if (isset($_GET["path"])){
+       $go_back = "?path=". ltrim(dirname($_GET["path"]),"./")."/"; 
+    } else $go_back = "";
     
     // create new dir logic
     if (isset($_POST['new_dir']) && (!file_exists($_POST['new_dir']))){     
@@ -74,7 +83,8 @@
     $file_tmp = $_FILES['file-name']['tmp_name'];
     $file_type = $_FILES['file-name']['type'];
      // check extension 
-    $file_ext = strtolower(end(explode('.',$_FILES['file-name']['name']))); 
+    $exploded = explode('.', $_FILES['file-name']['name']);
+    $file_ext = strtolower(end($exploded)); 
     $extensions = ["jpg","png","pdf"];
     if(in_array($file_ext, $extensions) === false){
         $errors = '<div class= "msg error" >File format not allowed !!! Please choose JPG, PNG or PDF file. </div>';
@@ -87,7 +97,7 @@
     $ext = pathinfo(path:$file_name, flags:PATHINFO_EXTENSION);
     $file_name= time() .'.'.$ext;
     if(empty($errors) == true) {
-        move_uploaded_file($file_tmp, './' . $_GET['path'] . $file_name); 
+        move_uploaded_file($file_tmp, $path . $file_name); 
         echo '<div class= "msg success"> File successfully uploaded !!! </div>'; 
         header("refresh: 1"); 
     } else {
@@ -96,7 +106,7 @@
     }
     // download file logic
     if(isset($_POST['download'])){
-     print('Path to download: ' . $path . $_POST['download']);
+    print('Path to download: ' . $path . $_POST['download']);
     $fileToDownloadEscaped = str_replace(" ", "_", htmlentities($path, 0, 'utf-8'));
     ob_clean();
     ob_start();
@@ -117,8 +127,9 @@
         if(is_file($_POST['delete'])) {
             unlink($_POST['delete']);
         } 
-        header("refresh: 1");  
+        //header("refresh: 1");  
     }  
+    $dir= scandir($path);
     // wrapper
     echo '<div style="display: flex; flex-direction: column;"><div class="new-dir_and_upload">';
     // create new dir
