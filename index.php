@@ -191,7 +191,7 @@ error_reporting (E_ALL);
         echo '<td>'.
         (is_dir($path.$value) 
         ?''
-        : ($value === 'index.php' || $value === 'style.css' || $value === 'README.md' || $value === 'css-icon.png' || $value === 'folder-icon.png' || $value === 'jpg-icon.png' || $value === 'markdown-icon.png' || $value === 'pdf-icon.png' || $value === 'php-icon.svg' || $value === 'png-icon.png' || $value === 'svg-icon.png' ? '' : '<form style= "display: flex; justify-content: center" action="" method="post">
+        : ($value === 'index.php' || $value === 'style.css' || $value === 'README.md' || $value === 'css-icon.png' || $value === 'folder-icon.png' || $value === 'jpg-icon.png' || $value === 'markdown-icon.png' || $value === 'pdf-icon.png' || $value === 'php-icon.svg' || $value === 'png-icon.png' || $value === 'svg-icon.png' || $value === 'git-clone.png' ? '' : '<form style= "display: flex; justify-content: center" action="" method="post">
            <button type ="submit" name="delete" value ='.$path.$value.'>Delete</button>
            </form>'));
         echo '</td>';   
