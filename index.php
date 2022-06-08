@@ -10,7 +10,7 @@ error_reporting (E_ALL);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Files System Browser PHP</title>
+    <title>File System Browser PHP</title>
     <style>
     <?php include 'style.css';
     ?>
@@ -57,7 +57,7 @@ error_reporting (E_ALL);
     <?php 
     if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true) {
     $log_out = './?action=logout';
-    echo '<header><h1>Files System Browser</h1></header>';
+    echo '<header><h1>File System Browser</h1></header>';
     
     if (isset($_GET["path"])) {
         $path='./' . $_GET["path"];
@@ -75,6 +75,30 @@ error_reporting (E_ALL);
      else if (isset($_POST['new_dir']) && file_exists($path. '/'.$_POST['new_dir'])) {
     echo '<div style="text-align: left; margin-left: 10%" class="msg error"> Directory named "' . $_POST['new_dir'] . '" already exists !!!</div>';}
 
+    // icons function
+    function get_icon ($value){
+    if (strpos($value, '.pdf') !== false) {
+        return "<img src = 'img/pdf-icon.png'/>";
+    }
+     elseif (strpos($value, '.php') !== false) {
+        return "<img src = 'img/php-icon.svg'/>";
+    }
+    elseif (strpos($value, '.jpg') !== false) {
+        return "<img src = 'img/jpg-icon.png'/>";
+    }
+    elseif (strpos($value, '.png') !== false) {
+        return "<img src = 'img/png-icon.png'/>";
+    }
+    elseif (strpos($value, '.css') !== false) {
+        return "<img src = 'img/css-icon.png'/>";
+    }
+    elseif (strpos($value, '.md') !== false) {
+        return "<img src = 'img/markdown-icon.png'/>";
+    }
+    elseif (strpos($value, '.svg') !== false) {
+        return "<img src = 'img/svg-icon.png'/>";
+    }
+}
     // upload files logic
    if(isset($_FILES['file-name'])){
     $errors = "";
@@ -98,15 +122,14 @@ error_reporting (E_ALL);
     $file_name= time() .'.'.$ext;
     if(empty($errors) == true) {
         move_uploaded_file($file_tmp, $path . $file_name); 
-        echo '<div class= "msg success"> File successfully uploaded !!! </div>'; 
         header("refresh: 1"); 
+        echo '<div class= "msg success"> File successfully uploaded !!! </div>';
     } else {
         print_r($errors);
         } 
     }
     // download file logic
     if(isset($_POST['download'])){
-    print('Path to download: ' . $path . $_POST['download']);
     $fileToDownloadEscaped = str_replace(" ", "_", htmlentities($path, 0, 'utf-8'));
     ob_clean();
     ob_start();
@@ -127,7 +150,6 @@ error_reporting (E_ALL);
         if(is_file($_POST['delete'])) {
             unlink($_POST['delete']);
         } 
-        //header("refresh: 1");  
     }  
     $dir= scandir($path);
     // wrapper
@@ -146,7 +168,7 @@ error_reporting (E_ALL);
     // table
     echo '<div style="display: flex; justify-content: center"><table style="background: rgb(235, 232, 232); color: rgba(0, 0, 0, 0.7); box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, 0.5);"><tr><th>Type</th><th>Name</th><th style="text-align: center">Download</th><th style="text-align: center">Delete</th></tr> ';
     foreach ($dir as $value){
-    if ($value != '..' && $value !='.' && $value != '.git' && $value != '.DS_Store' && $value != 'index.php' && $value != 'style.css' ){
+    if ($value != '..' && $value !='.' && $value != '.git' && $value != '.DS_Store'){
         // checks type
         echo '<tr>'.'<td><div class="file-or-dir">';
         if (is_dir($path.$value))
@@ -155,8 +177,8 @@ error_reporting (E_ALL);
         // display files
         echo '<td><div class="file-display" style= "display: flex; min-width: 40vw;">'.(is_dir($path.$value)? '<a style= "color: rgba(0, 0, 0, 0.7);" href="'.(isset($_GET['path'])
         ? $_SERVER['REQUEST_URI'].$value.'/'
-        : $_SERVER['REQUEST_URI'].'?path='.$value.'/').'">'.$value.'</a>'
-        : $value); '</td>';
+        : $_SERVER['REQUEST_URI'].'?path='.$value.'/').'"><img src= "./img/folder-icon.png" class="dir" />'.$value.'</a>'
+        : get_icon($value).' '. $value); '</td>';
         // download file
         echo '</div><td>';
             if(is_file($path.$value)){
@@ -169,12 +191,13 @@ error_reporting (E_ALL);
         echo '<td>'.
         (is_dir($path.$value) 
         ?''
-        : '<form style= "display: flex; justify-content: center" action="" method="post">
+        : ($value === 'index.php' || $value === 'style.css' || $value === 'README.md' || $value === 'css-icon.png' || $value === 'folder-icon.png' || $value === 'jpg-icon.png' || $value === 'markdown-icon.png' || $value === 'pdf-icon.png' || $value === 'php-icon.svg' || $value === 'png-icon.png' || $value === 'svg-icon.png' ? '' : '<form style= "display: flex; justify-content: center" action="" method="post">
            <button type ="submit" name="delete" value ='.$path.$value.'>Delete</button>
-           </form>');
+           </form>'));
         echo '</td>';   
     }
 }
+
     echo "</table></div>"; 
     // go back and logout
     echo '<div style= "display: flex; justify-content: space-between; margin-top: 3rem" >';

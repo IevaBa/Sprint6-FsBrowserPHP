@@ -71,6 +71,9 @@ th {
 .file-or-dir {
   padding: 0.8rem 0;
 }
+.file-display {
+  align-items: center;
+}
 table button {
   padding: 0.4rem;
 }
@@ -162,4 +165,8 @@ button {
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
+}
+img {
+  width: 1.5rem;
+  margin-right: 1rem;
 }
