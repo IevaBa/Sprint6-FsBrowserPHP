@@ -20,7 +20,7 @@
 ## Launch procedure
 
 1. Install XAMPP (or other web server package).
-2. Navigate to the directory where you want to have this project saved.
+2. Navigate to the XAMPP => htdocs directory, here you have to save this project.
 3. Clone my Github repository [Sprint6-FsBrowserPHP](https://github.com/IevaBa/Sprint6-FsBrowserPHP.git)
 
 ![](./img/git-clone.png)
@@ -29,7 +29,7 @@
 5. Open cloned project in VScode.
 6. Run XAMPP and start Apache Web Server.
 7. Open your browser and in the search bar type:
-   `localhost/FsBrowserPHP/`.
+   `localhost/Sprint6-FsBrowserPHP/`.
 8. Login with username `Ieva` and password `1234`
 9. Enjoy browsing !
 
